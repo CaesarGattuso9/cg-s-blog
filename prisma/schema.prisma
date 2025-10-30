@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 博客文章
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  content     String
+  coverImage  String?
+  published   Boolean  @default(false)
+  viewCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  tags        Tag[]
+  
+  @@index([published, createdAt])
+  @@index([slug])
+}
+
+// 分类
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  posts       Post[]
+  createdAt   DateTime @default(now())
+}
+
+// 标签
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+// 随记
+model Moment {
+  id        String   @id @default(cuid())
+  content   String
+  images    String[] // JSON array of image URLs
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([published, createdAt])
+}
+
+// 图库相册
+model Album {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  coverImage  String?
+  category    String?
+  tags        String[] // 标签数组
+  ossFolder   String?  // OSS 存储文件夹名称
+  published   Boolean  @default(true)
+  likeCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  images      AlbumImage[]
+  
+  @@index([published, createdAt])
+}
+
+// 相册中的图片
+model AlbumImage {
+  id            String   @id @default(cuid())
+  albumId       String
+  imageUrl      String
+  title         String?
+  description   String?
+  order         Int      @default(0)
+  fileType      String?  @default("image") // 文件类型：image 或 video
+  
+  // EXIF 信息
+  takenAt       DateTime? // 拍摄时间
+  latitude      Float?    // 纬度
+  longitude     Float?    // 经度
+  location      String?   // 地点名称（可选）
+  cameraMake    String?   // 相机制造商
+  cameraModel   String?   // 相机型号
+  
+  createdAt     DateTime @default(now())
+  
+  album         Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  
+  @@index([albumId, order])
+}
+
+// 留言
+model Guestbook {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  website   String?
+  content   String
+  category  String   @default("留言") // 留言、吐槽、建议等
+  theme     String   @default("pink") // 主题颜色
+  fontType  String   @default("default") // 字体类型
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@index([approved, createdAt])
+}
+
+// 用户（管理员）
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String
+  role          String    @default("admin")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
