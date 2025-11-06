@@ -81,7 +81,8 @@ export default function GalleryPage() {
           {albums.map((album) => {
             const isHovered = hoveredAlbum === album.id;
             const currentImage = album.images[currentImageIndex[album.id] || 0];
-            const displayImage = isHovered && currentImage ? currentImage.imageUrl : album.coverImage;
+            const fallbackCover = album.coverImage || (album.images && album.images[0]?.imageUrl);
+            const displayImage = isHovered && currentImage ? currentImage.imageUrl : fallbackCover;
 
             return (
               <Link

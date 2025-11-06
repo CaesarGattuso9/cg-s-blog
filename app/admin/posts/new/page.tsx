@@ -94,11 +94,14 @@ export default function NewPostPage() {
     }
   }, []);
 
-  // 检查是否是 OSS 图片地址
+  // 检查是否是对象存储图片地址（兼容 Aliyun OSS / Tencent COS）
   const isOSSUrl = (url: string): boolean => {
-    // 根据你的 OSS 配置调整这个判断逻辑
-    // 例如：判断是否包含你的 OSS 域名
-    return url.includes('.aliyuncs.com') || url.includes('oss-');
+    return (
+      url.includes('.aliyuncs.com') ||
+      url.includes('oss-') ||
+      url.includes('.myqcloud.com') ||
+      url.includes('.cos.')
+    );
   };
 
   // 获取编辑器实例

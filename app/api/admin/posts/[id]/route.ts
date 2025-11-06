@@ -59,14 +59,14 @@ export async function PUT(
       return NextResponse.json({ error: '文章不存在' }, { status: 404 });
     }
 
-    // 自动上传 Markdown 中的外链图片到 OSS
+    // 自动上传 Markdown 中的外链图片到 COS
     try {
-      const ossBucket = process.env.OSS_BUCKET;
-      const result = await processMarkdownImages(content, ossBucket);
+      const cosBucket = process.env.COS_BUCKET;
+      const result = await processMarkdownImages(content, cosBucket);
       content = result.content;
 
       if (result.uploadedCount > 0) {
-        console.log(`✅ 已自动上传 ${result.uploadedCount} 张图片到 OSS`);
+        console.log(`✅ 已自动上传 ${result.uploadedCount} 张图片到 COS`);
       }
     } catch (error) {
       console.warn('⚠️ Markdown 图片处理失败，使用原始内容:', error);

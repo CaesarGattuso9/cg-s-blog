@@ -101,182 +101,6 @@
   animation: fadeIn 0.5s ease-out;
 }
 
-/* SimpleMDE Markdown 编辑器样式 */
-.markdown-editor-wrapper .EasyMDEContainer {
-  @apply border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden;
-}
-
-.markdown-editor-wrapper .EasyMDEContainer .CodeMirror {
-  @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 16px;
-  line-height: 1.8;
-  min-height: 600px;
-}
-
-.markdown-editor-wrapper .editor-toolbar {
-  @apply bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600;
-  padding: 12px 10px;
-}
-
-.markdown-editor-wrapper .editor-toolbar button {
-  @apply text-gray-700 dark:text-gray-300;
-  width: 36px;
-  height: 36px;
-}
-
-.markdown-editor-wrapper .editor-toolbar button:hover {
-  @apply bg-gray-200 dark:bg-gray-700;
-}
-
-.markdown-editor-wrapper .editor-toolbar button.active {
-  @apply bg-gray-300 dark:bg-gray-600;
-}
-
-.markdown-editor-wrapper .editor-toolbar i.separator {
-  @apply border-l border-gray-300 dark:border-gray-600;
-}
-
-.markdown-editor-wrapper .CodeMirror-cursor {
-  @apply border-l-2 border-blue-500;
-}
-
-.markdown-editor-wrapper .CodeMirror-selected {
-  @apply bg-blue-100 dark:bg-blue-900/30;
-}
-
-.markdown-editor-wrapper .editor-preview {
-  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
-  padding: 24px 32px;
-}
-
-.markdown-editor-wrapper .editor-preview-side {
-  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-l border-gray-200 dark:border-gray-600;
-  padding: 24px 32px;
-}
-
-/* Markdown 预览样式 */
-.markdown-editor-wrapper .editor-preview h1,
-.markdown-editor-wrapper .editor-preview-side h1 {
-  @apply text-4xl font-bold mt-8 mb-6;
-}
-
-.markdown-editor-wrapper .editor-preview h2,
-.markdown-editor-wrapper .editor-preview-side h2 {
-  @apply text-3xl font-bold mt-6 mb-4;
-}
-
-.markdown-editor-wrapper .editor-preview h3,
-.markdown-editor-wrapper .editor-preview-side h3 {
-  @apply text-2xl font-semibold mt-5 mb-3;
-}
-
-.markdown-editor-wrapper .editor-preview p,
-.markdown-editor-wrapper .editor-preview-side p {
-  @apply my-4 leading-relaxed text-base;
-}
-
-.markdown-editor-wrapper .editor-preview pre,
-.markdown-editor-wrapper .editor-preview-side pre {
-  @apply bg-gray-100 dark:bg-gray-800 p-5 rounded-lg my-5 overflow-x-auto;
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-.markdown-editor-wrapper .editor-preview code,
-.markdown-editor-wrapper .editor-preview-side code {
-  @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded;
-  font-size: 14px;
-}
-
-.markdown-editor-wrapper .editor-preview pre code,
-.markdown-editor-wrapper .editor-preview-side pre code {
-  @apply bg-transparent p-0;
-}
-
-.markdown-editor-wrapper .editor-preview a,
-.markdown-editor-wrapper .editor-preview-side a {
-  @apply text-blue-500 hover:text-blue-600 underline;
-}
-
-.markdown-editor-wrapper .editor-preview blockquote,
-.markdown-editor-wrapper .editor-preview-side blockquote {
-  @apply border-l-4 border-blue-500 dark:border-blue-400 pl-6 py-2 my-5 italic bg-gray-50 dark:bg-gray-800/50;
-  font-size: 16px;
-}
-
-.markdown-editor-wrapper .editor-preview ul,
-.markdown-editor-wrapper .editor-preview-side ul {
-  @apply list-disc list-inside my-4;
-  font-size: 16px;
-  line-height: 1.8;
-}
-
-.markdown-editor-wrapper .editor-preview ol,
-.markdown-editor-wrapper .editor-preview-side ol {
-  @apply list-decimal list-inside my-4;
-  font-size: 16px;
-  line-height: 1.8;
-}
-
-.markdown-editor-wrapper .editor-preview table,
-.markdown-editor-wrapper .editor-preview-side table {
-  @apply w-full border-collapse my-5;
-  font-size: 15px;
-}
-
-.markdown-editor-wrapper .editor-preview th,
-.markdown-editor-wrapper .editor-preview-side th {
-  @apply bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 px-5 py-3 font-semibold;
-}
-
-.markdown-editor-wrapper .editor-preview td,
-.markdown-editor-wrapper .editor-preview-side td {
-  @apply border border-gray-300 dark:border-gray-600 px-5 py-3;
-}
-
-.markdown-editor-wrapper .editor-preview img,
-.markdown-editor-wrapper .editor-preview-side img {
-  @apply max-w-full h-auto rounded-lg my-6;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-/* 文章详情页 Markdown 内容样式 */
-.markdown-content {
-  font-size: 17px;
-  line-height: 1.8;
-}
-
-.markdown-content h1,
-.markdown-content h2,
-.markdown-content h3,
-.markdown-content h4,
-.markdown-content h5,
-.markdown-content h6 {
-  scroll-margin-top: 2rem;
-}
-
-.markdown-content pre {
-  tab-size: 2;
-}
-
-.markdown-content code {
-  font-family: 'Monaco', 'Menlo', 'Consolas', 'Ubuntu Mono', monospace;
-}
-
-.markdown-content img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.markdown-content table {
-  width: 100%;
-}
-
-.markdown-content blockquote p {
-  margin: 0;
-}
 
 /* 随记页面格子线背景 */
 .moment-lines {
@@ -295,4 +119,166 @@
       transparent 28px,
       #374151 28px,
       #374151 29px);
+}
+
+#markdown {
+  font-family: sans-serif;
+  width: 100%;
+  max-width: none;
+  /* 让正文跟随栅格宽度 */
+  margin: 0;
+}
+
+/* Header
+-------------------- */
+
+#markdown h1,
+#markdown h2,
+#markdown h3,
+#markdown h4,
+#markdown h5,
+#markdown h6 {
+  cursor: default;
+  /* 锚点跳转时避免被导航栏遮挡（导航栏高度 64px + 额外间距） */
+  scroll-margin-top: 80px;
+}
+
+#markdown h1 {
+  margin: 20px 0;
+  text-align: center;
+}
+
+#markdown h2 {
+  margin: 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+#markdown h3 {
+  position: relative;
+  margin: 10px 0;
+}
+
+#markdown h3::before {
+  content: "#";
+  position: absolute;
+  top: 0;
+  left: -16px;
+  color: rgb(61, 158, 238);
+}
+
+#markdown h4 {
+  margin: 10px 0;
+}
+
+/* Text Formating
+-------------------- */
+
+#markdown p {
+  margin: 12px 0;
+}
+
+#markdown code {
+  margin: 0 2px;
+  padding: 3px 5px;
+  border-radius: 2px;
+  color: rgb(236, 90, 22);
+  background-color: #eee;
+}
+
+/* Horizontal Rule
+-------------------- */
+
+#markdown hr {
+  height: 2px;
+  margin: 16px 0;
+  border: none;
+  background-color: #ccc;
+}
+
+/* Cites
+-------------------- */
+
+#markdown blockquote {
+  border-left: 4px solid #0eaeec;
+  padding: 10px 15px;
+  color: #666;
+  background-color: #dbf3fd;
+}
+
+/* Table
+-------------------- */
+
+#markdown table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+#markdown table th,
+#markdown table td {
+  padding: 6px 12px;
+  border: 1px solid #dfe2e5;
+}
+
+#markdown table tr {
+  background-color: #fff;
+}
+
+#markdown table thead tr,
+#markdown table tbody tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+/* Code Block
+-------------------- */
+
+#markdown pre code {
+  display: block;
+  padding: 16px 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  color: #525252;
+  font-size: 14px;
+  line-height: 22px;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* List
+-------------------- */
+
+#markdown ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+#markdown ul li {
+  margin: 8px 0;
+}
+
+#markdown ul ul {
+  list-style-type: circle;
+}
+
+#markdown ul ul ul {
+  list-style-type: square;
+}
+
+/* Link
+-------------------- */
+
+#markdown a {
+  color: #0eaeec;
+  font-weight: bold;
+}
+
+/* Image
+-------------------- */
+
+#markdown img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 16px auto;
 }

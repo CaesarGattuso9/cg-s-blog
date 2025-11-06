@@ -5,7 +5,7 @@
 1. [快速开始](#快速开始)
 2. [环境配置](#环境配置)
 3. [数据库配置](#数据库配置)
-4. [OSS 存储配置](#oss-存储配置)
+4. [COS 存储配置](#cos-存储配置)
 5. [地图服务配置](#地图服务配置)
 6. [分片上传](#分片上传)
 7. [部署指南](#部署指南)
@@ -53,11 +53,12 @@ DATABASE_URL="postgresql://postgres:密码@localhost:5432/blog"
 NEXTAUTH_SECRET="运行: openssl rand -base64 32"
 NEXTAUTH_URL="http://localhost:3000"
 
-# 阿里云 OSS（图片/视频存储）
-OSS_REGION="oss-cn-hangzhou"
-OSS_ACCESS_KEY_ID="你的AccessKeyId"
-OSS_ACCESS_KEY_SECRET="你的AccessKeySecret"
-OSS_BUCKET="你的Bucket名称"
+# 腾讯云 COS（图片/视频存储）
+COS_REGION="ap-shanghai"
+COS_SECRET_ID="你的SecretId"
+COS_SECRET_KEY="你的SecretKey"
+COS_BUCKET="你的Bucket名称"
+COS_CUSTOM_DOMAIN="可选：你的自定义域名或默认域名"
 
 # 高德地图（可选，用于地理位置转换）
 NEXT_PUBLIC_AMAP_KEY="你的高德API_Key"
@@ -105,23 +106,21 @@ npx prisma studio
 
 ---
 
-## OSS 存储配置
+## COS 存储配置
 
-### 获取 OSS 配置
+### 获取 COS 配置
 
 1. **创建 Bucket**
-   - 访问 [阿里云 OSS 控制台](https://oss.console.aliyun.com/)
-   - 创建 Bucket，选择区域，设置为「公共读」
+   - 访问 [腾讯云 COS 控制台](https://console.cloud.tencent.com/cos)
+   - 创建存储桶（Bucket），选择区域（如 `ap-shanghai`），权限建议「公有读」
 
-2. **获取 AccessKey**
-   - 访问 [RAM 控制台](https://ram.console.aliyun.com/manage/ak)
-   - 创建 AccessKey，保存 ID 和 Secret
+2. **获取密钥**
+   - 访问 [访问管理 - CAM](https://console.cloud.tencent.com/cam/capi)
+   - 创建或查看 `SecretId`/`SecretKey`
 
-3. **常用区域**
-   - `oss-cn-hangzhou` - 杭州
-   - `oss-cn-shanghai` - 上海
-   - `oss-cn-beijing` - 北京
-   - `oss-cn-shenzhen` - 深圳
+3. **默认访问域名**
+   - `${Bucket}.cos.${Region}.myqcloud.com`
+   - 例如：`csgblod-1384771334.cos.ap-shanghai.myqcloud.com`
 
 ### 功能特性
 
@@ -168,7 +167,7 @@ NEXT_PUBLIC_AMAP_KEY="你的API_Key"
 大文件（≥10MB）自动切分成 5MB 小片段，3 个并发上传。
 
 ```
-文件 → 分片1、2、3... → 并发上传 → OSS 合并 → 完成
+文件 → 分片1、2、3... → 并发上传 → COS 合并 → 完成
 ```
 
 ### 性能提升
@@ -204,7 +203,7 @@ await uploadFileInChunks({
 
 1. 推送代码到 GitHub
 2. 在 [Vercel](https://vercel.com) 导入项目
-3. 配置环境变量（DATABASE_URL, OSS 配置等）
+3. 配置环境变量（DATABASE_URL, COS 配置等）
 4. 部署
 
 ### Docker 部署
@@ -216,7 +215,7 @@ docker build -t blog .
 # 运行
 docker run -p 3000:3000 \
   -e DATABASE_URL="..." \
-  -e OSS_ACCESS_KEY_ID="..." \
+  -e COS_SECRET_ID="..." \
   blog
 ```
 
@@ -237,8 +236,8 @@ npm start
 ### Q: 图片无法显示
 
 **A:** 检查：
-- OSS Bucket 是否设置为「公共读」
-- `.env` 中 OSS 配置是否正确
+- COS Bucket 是否设置为「公共读」
+- `.env` 中 COS 配置是否正确
 - 重启开发服务器
 
 ### Q: 数据库连接失败
@@ -283,7 +282,7 @@ npm start
 - **框架**: Next.js 14 + React 18 + TypeScript
 - **数据库**: PostgreSQL + Prisma ORM
 - **认证**: NextAuth.js
-- **存储**: 阿里云 OSS
+- **存储**: 腾讯云 COS
 - **样式**: Tailwind CSS
 - **Markdown**: react-simplemde-editor + react-markdown
 - **图片处理**: heic2any + exifr
@@ -294,7 +293,7 @@ npm start
 ## 核心文件
 
 ### 工具函数
-- `lib/oss.ts` - OSS 上传
+- `lib/oss.ts` - 对象存储上传（COS）
 - `lib/upload-chunked.ts` - 分片上传
 - `lib/image-utils.ts` - 图片处理（HEIC、EXIF）
 - `lib/auth.ts` - 用户认证
@@ -317,7 +316,7 @@ npm start
 1. **图片优化**: 使用 Next.js Image 组件
 2. **分片上传**: 大文件并发上传
 3. **缓存策略**: 静态页面 ISR
-4. **CDN**: OSS + CDN 加速
+4. **CDN**: COS + CDN 加速
 5. **数据库**: 添加常用字段索引
 
 ---
@@ -327,7 +326,7 @@ npm start
 1. ⚠️ 不要将 `.env` 提交到 Git
 2. 定期更换 AccessKey 和密码
 3. 生产环境启用 HTTPS
-4. 配置 OSS 防盗链
+4. 配置 COS 防盗链
 5. 设置高德 API IP 白名单
 
 ---
@@ -344,9 +343,9 @@ pg_dump -U postgres blog > backup.sql
 psql -U postgres blog < backup.sql
 ```
 
-### OSS 文件备份
+### COS 文件备份
 
-定期备份 OSS Bucket 或配置跨区域复制。
+定期备份 COS Bucket 或配置跨地域复制。
 
 ---
 

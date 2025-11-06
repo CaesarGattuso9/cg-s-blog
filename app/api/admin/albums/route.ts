@@ -42,13 +42,18 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await request.json();
-    const { title, description, coverImage, category, tags, published, ossFolder, images } = data;
+    let { title, description, coverImage, category, tags, published, ossFolder, images } = data;
 
     if (!title) {
       return NextResponse.json(
         { error: '标题不能为空' },
         { status: 400 }
       );
+    }
+
+    // 若未显式提供封面且有图片，默认取第一张图片作为封面
+    if (!coverImage && Array.isArray(images) && images.length > 0) {
+      coverImage = images[0]?.url || images[0]?.imageUrl || coverImage;
     }
 
     const album = await prisma.album.create({

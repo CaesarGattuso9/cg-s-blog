@@ -117,7 +117,12 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
 
   // 检查是否是 OSS 图片地址
   const isOSSUrl = (url: string): boolean => {
-    return url.includes('.aliyuncs.com') || url.includes('oss-');
+    return (
+      url.includes('.aliyuncs.com') ||
+      url.includes('oss-') ||
+      url.includes('.myqcloud.com') ||
+      url.includes('.cos.')
+    );
   };
 
   // 获取编辑器实例

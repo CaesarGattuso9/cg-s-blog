@@ -1,11 +1,35 @@
 import Link from "next/link";
 import Image from "next/image";
+import { headers } from "next/headers";
 import { ArrowRight, BookOpen, Camera, MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-export default function HomePage() {
+export default async function HomePage() {
+  // 服务端获取最新文章与随记：构造绝对 URL 以兼容 Node 端 fetch
+  const h = headers();
+  const host = h.get('host') || 'localhost:3000';
+  const proto = h.get('x-forwarded-proto') || 'http';
+  const origin = `${proto}://${host}`;
+
+  const [postsRes, momentsRes] = await Promise.all([
+    fetch(`${origin}/api/posts`, { cache: 'no-store' }),
+    fetch(`${origin}/api/moments`, { cache: 'no-store' }),
+  ]);
+
+  if (!postsRes.ok) {
+    throw new Error(`获取文章失败: ${postsRes.status}`);
+  }
+  if (!momentsRes.ok) {
+    throw new Error(`获取随记失败: ${momentsRes.status}`);
+  }
+
+  const postsData = await postsRes.json();
+  const momentsData = await momentsRes.json();
+
+  const latestPosts = (postsData.posts || []).slice(0, 3);
+  const latestMoments = (momentsData.moments || []).slice(0, 3);
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -123,29 +147,41 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* 示例文章卡片 */}
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="aspect-video bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30" />
-                <CardHeader>
-                  <div className="flex gap-2 mb-2">
-                    <Badge variant="secondary">Next.js</Badge>
-                    <Badge variant="secondary">TypeScript</Badge>
+            {latestPosts.map((post: any) => (
+              <Link key={post.id} href={`/blog/${post.slug}`}>
+                <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="relative aspect-video bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30">
+                    {post.coverImage && (
+                      <Image
+                        src={post.coverImage}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                      />
+                    )}
                   </div>
-                  <CardTitle className="line-clamp-2">
-                    示例博客文章标题 {i}
-                  </CardTitle>
-                  <CardDescription className="line-clamp-2">
-                    这是一篇示例文章的描述，展示博客文章的基本布局和样式...
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>2024-01-01</span>
-                    <span>5 分钟阅读</span>
-                  </div>
-                </CardContent>
-              </Card>
+                  <CardHeader>
+                    <div className="flex gap-2 mb-2">
+                      {post.category?.name && (
+                        <Badge variant="secondary">{post.category.name}</Badge>
+                      )}
+                      {(post.tags || []).slice(0, 2).map((t: any) => (
+                        <Badge key={t.id} variant="secondary">{t.name}</Badge>
+                      ))}
+                    </div>
+                    <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+                    {post.description && (
+                      <CardDescription className="line-clamp-2">{post.description}</CardDescription>
+                    )}
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                      {/* 预留阅读时长位 */}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
@@ -165,18 +201,19 @@ export default function HomePage() {
           </div>
 
           <div className="max-w-3xl mx-auto space-y-6">
-            {[1, 2, 3].map((i) => (
-              <Card key={i}>
-                <CardContent className="pt-6">
-                  <p className="text-muted-foreground mb-4">
-                    这是一条示例随记内容，记录生活中的小事和想法。
-                    可以包含文字、图片等多种形式的内容... 🌟
-                  </p>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>2024-01-0{i}</span>
-                  </div>
-                </CardContent>
-              </Card>
+            {latestMoments.map((m: any) => (
+              <Link key={m.id} href="/moments">
+                <Card>
+                  <CardContent className="pt-6">
+                    <p className="text-muted-foreground mb-4 line-clamp-3">
+                      {m.content}
+                    </p>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <span>{new Date(m.createdAt).toLocaleDateString()}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
